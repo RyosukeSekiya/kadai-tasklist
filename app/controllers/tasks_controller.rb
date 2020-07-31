@@ -1,16 +1,9 @@
 class TasksController < ApplicationController
   before_action :require_user_logged_in
-  before_action :set_task, only: %i[show edit update destroy]
-  before_action :correct_user, only: %i[destroy]
+  before_action :correct_user, only: %i[show edit update destroy]
   
   def index
-    # TODO, @taskは@new_taskとかの方が間違いにくいのでは？
-    @new_task = current_user.tasks.build
     @tasks = current_user.tasks.order(id: :desc).page(params[:page])
-    # if logged_in?
-    # @task = current_user.tasks.build
-    # @tasks = current_user.tasks.order(id: :desc).page(params[:page])
-    # end
   end
 
   def show; end
@@ -56,31 +49,26 @@ class TasksController < ApplicationController
     redirect_to tasks_url
   end
   
+  
   private
   #Strong Paramater
-  def set_task
-    @task = current_user.tasks.find(params[:id])
-    # @task = Task.find(params[:id])
-  end
   
   def task_params
     params.require(:task).permit(:content, :status)
   end
 
-  
   # is_correct_user?
   
   #def is_correct_user?(model, id)
     #current_user [model].id == model.idのuser_id
   #end
-  
-  
+
   def correct_user
-    # できる限り1行でまとめる
-    redirect_to root_url unless current_user.tasks.find(params[:id])
-    # @task = current_user.tasks.find(params[:id])
-    # unless @task
-    #   redirect_to root_url
-    # end
+    # # できる限り1行でまとめる
+    # redirect_to root_url unless current_user.tasks.find(params[:id])
+    @task = current_user.tasks.find(params[:id])
+    unless @task
+      redirect_to root_url
+    end
   end
 end
