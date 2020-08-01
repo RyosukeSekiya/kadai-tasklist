@@ -1,9 +1,9 @@
 class TasksController < ApplicationController
   before_action :require_user_logged_in
-  before_action :correct_user, only: [:show,:edit,:update,:destroy]
+  before_action :correct_user, only: %i[show edit update destroy]
   
   def index
-    @tasks = current_user.tasks.order(id: :desc).page(params[:page])
+    @tasks = current_user.tasks.order(created_at: :desc).page(params[:page])
   end
 
   def show
@@ -54,20 +54,18 @@ class TasksController < ApplicationController
   
   private
   #Strong Paramater
-  
   def task_params
     params.require(:task).permit(:content, :status)
   end
 
   # is_correct_user?
-  
-  #def is_correct_user?(model, id)
-    #current_user [model].id == model.idのuser_id
-  #end
 
   def correct_user
-    @task = current_user.tasks.find(params[:id])
-    unless @task 
+    # 自分のtask以外は検索できないようになっている。現状で
+    # @taskが見つからない= 自分の奴が見つからない -> 404ページに飛ばすことが一般的
+    # https://qiita.com/zeppekipanda/items/fb1ea251197003deec12
+    @task = current_user.tasks.find_by(params[:id])
+    unless @task
       redirect_to root_url
     end
   end

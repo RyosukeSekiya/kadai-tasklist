@@ -12,7 +12,7 @@
 
 <h1>タスク一覧</h1>
 
-<% if @tasks.any? %>
+<% unless @tasks.nil? %>
   <table class="table table-striped">
     <thead>
       <tr>
