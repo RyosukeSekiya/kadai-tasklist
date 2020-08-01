@@ -6,7 +6,8 @@ class TasksController < ApplicationController
     @tasks = current_user.tasks.order(id: :desc).page(params[:page])
   end
 
-  def show; end
+  def show
+  end
 
   def new
     # @task = Task.new はUserに紐づいていないのでわかりにくい
@@ -31,7 +32,8 @@ class TasksController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+  end
 
   def update
     if @task.update(task_params)
@@ -64,7 +66,7 @@ class TasksController < ApplicationController
   #end
 
   def correct_user
-    @task = current_user.tasks.find_by(params[:id])
+    @task = current_user.tasks.find(params[:id])
     unless @task 
       redirect_to root_url
     end
