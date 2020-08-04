@@ -66,7 +66,7 @@ class TasksController < ApplicationController
     # 自分のtask以外は検索できないようになっている。現状で
     # @taskが見つからない= 自分の奴が見つからない -> 404ページに飛ばすことが一般的
     # https://qiita.com/zeppekipanda/items/fb1ea251197003deec12
-    @task = current_user.tasks.find_by(params[:id])
+    @task = current_user.tasks.find_by(id: params[:id])
     unless @task
       redirect_to root_url
     end
